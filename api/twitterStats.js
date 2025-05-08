@@ -32,8 +32,8 @@ app.get('/api/twitter-stats', async (req, res) => {
   }
 });
 
-// app.listen(process.env.PORT, () => {
-//   console.log(`API running on http://localhost:${process.env.PORT}`);
-// });
+app.listen(process.env.PORT, () => {
+  console.log(`API running on http://localhost:${process.env.PORT}`);
+});
 
-module.exports = serverless(app);
+// module.exports = serverless(app);
