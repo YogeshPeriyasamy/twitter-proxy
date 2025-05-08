@@ -2,6 +2,7 @@
 require('dotenv').config();
 const { TwitterApi } = require('twitter-api-v2');
 const express = require('express');
+const serverless = require('serverless-http');
 
 const app = express();
 const client = new TwitterApi(process.env.TWITTER_BEARER_TOKEN);
@@ -31,6 +32,8 @@ app.get('/api/twitter-stats', async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`API running on http://localhost:${process.env.PORT}`);
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(`API running on http://localhost:${process.env.PORT}`);
+// });
+
+module.exports = serverless(app);
