@@ -14,18 +14,31 @@ app.get('/api/twitter-stats', async (req, res) => {
     if (!username) {
       return res.status(400).json({ error: 'Username required' });
     }
+    let userarray=username.split(/[\s,]+/);
+    console.log(userarray);
+    let records=[];
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    for(let name of userarray)
+    {
+      console.log(name);
+      await sleep(20000);
+      const { data } = await client.v2.userByUsername(name, {
+        'user.fields': ['public_metrics']
+      });
+      console.log(data);
+      records.push({
+        username: data.username,
+        followers: data.public_metrics.followers_count,
+        following: data.public_metrics.following_count
+      });
+    }
+    records.sort((a, b) => b.followers - a.followers);
 
-    const { data } = await client.v2.userByUsername(username, {
-      'user.fields': ['public_metrics']
-    });
-
-    res.json({
-      username: data.username,
-      followers: data.public_metrics.followers_count,
-      following: data.public_metrics.following_count
-    });
+    console.log(records);
+    res.json(records);
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ 
       error: error.message || 'Twitter API failed' 
     });
